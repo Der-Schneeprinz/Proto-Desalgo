@@ -14,16 +14,16 @@ package main;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
+//import main.ulam.*;
 
 import javax.swing.*;
 //JFrame, JPanel, JCheckBox, GridLayout
 
-import com.mysql.cj.xdevapi.Table;
+import main.ulam.UlamArray;
 
 public class Knapsack implements ActionListener, ItemListener {
+
+    UlamArray[] ulams = new UlamArray[2];
     
     //For alignments
     JFrame frame;
@@ -57,6 +57,104 @@ public class Knapsack implements ActionListener, ItemListener {
     Font fBold;
 
     public Knapsack() {
+
+        ulams[0] = new UlamArray(
+            "Pinakbet",
+            80,
+            new String[] {
+                "String Beans",
+                "Okra",
+                "Eggplant",
+                "Squash",
+                "Alamang",
+                "Onion",
+                "Garlic",
+                "Ginger",
+                "Green Beans"
+            },
+            new double[] {
+                10,
+                10,
+                10,
+                20,
+                10,
+                5,
+                3,
+                10,
+                10
+            },
+            new double[] {
+                200,
+                200,
+                200,
+                250,
+                50,
+                50,
+                10,
+                50,
+                200
+            },
+            new String[] {
+                "g",
+                "g",
+                "g",
+                "g",
+                "g",
+                "g",
+                "g",
+                "g",
+                "g"
+            }
+        );
+        ulams[1] = new UlamArray(
+            "Ginataang Papaya",
+            120,
+            new String[] {
+                "Papaya",
+                "Gata",
+                "Ginger",
+                "Chicken",
+                "Long Chili",
+                "Onion",
+                "Garlic",
+                "Black Pepper",
+                "Malunggay Leaves"
+            },
+            new double[] {
+                25,
+                30,
+                5,
+                35,
+                2,
+                5.5,
+                3.5,
+                2,
+                20
+            },
+            new double[] {
+                1000,
+                500,
+                200,
+                250,
+                20,
+                50,
+                10,
+                5,
+                50
+            },
+            new String[] {
+                "g",
+                "mL",
+                "g",
+                "g",
+                "g",
+                "g",
+                "g",
+                "g",
+                "g"
+            }
+        );
+
         //Frame setup
         final int vGap = 4;
         final int hGap = 4;
@@ -90,7 +188,44 @@ public class Knapsack implements ActionListener, ItemListener {
         panel2.add(btnBudget);
         btnBudget.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                
+                try {
+                    int budget = Integer.parseInt(txtBudget.getText());
+                    cmbSelection.removeAllItems();
+                    if(budget < 80) {
+                        cmbSelection.removeAllItems();
+                        cmbSelection.setEnabled(false);
+                        JOptionPane.showMessageDialog(null, "Please input the correct amount of budget.", "Invalid Amount", JOptionPane.PLAIN_MESSAGE, null);
+                    } else {
+
+                        cmbSelection.setEnabled(true);
+                        for(int i = 0; i > ulams.length; i++) {
+                            if(budget >= ulams[i].getPresyo())
+                                cmbSelection.addItem(ulams[i].getTitle());
+                        }
+                        /*
+                        cmbSelection.setEnabled(true);
+                        cmbSelection.addItem("Pakbet");
+                        if(  budget >= 120) {
+                            cmbSelection.setEnabled(true);
+                            cmbSelection.addItem("Ginataang Papaya");
+                        }
+                        if(  budget >= 130) {
+                            cmbSelection.setEnabled(true);
+                            cmbSelection.addItem("Sinigang na Isda");
+                        }
+                        if(  budget >= 150) {
+                            cmbSelection.setEnabled(true);
+                            cmbSelection.addItem("Sinigang na Baboy");
+                            cmbSelection.addItem("Chapseuy");
+                        }
+                        if(  budget >= 180) {
+                            cmbSelection.setEnabled(true);
+                            cmbSelection.addItem("Sinigang na Hipon");
+                        }*/
+                    }
+                } catch(Exception e) {
+                    e.getStackTrace();
+                }
             }
         });
 
@@ -100,6 +235,31 @@ public class Knapsack implements ActionListener, ItemListener {
         panel3.add(lblSelection);
         panel3.add(cmbSelection);
         cmbSelection.setEnabled(false);
+        cmbSelection.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                String[] item = new String[10];
+                for(int i = 0; cmbSelection.getItemAt(i) != null; i++) {
+                    item[i] = cmbSelection.getItemAt(i);    //MALI AAAAAAAAA
+                }
+                try {
+                    switch(cmbSelection.getSelectedIndex()) {
+                        case 0:
+                            JOptionPane.showMessageDialog(null, "", "title", JOptionPane.PLAIN_MESSAGE, null);
+                            break;
+                        case 1:
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            break;
+                    }
+                } catch(Exception e) {
+                    e.getStackTrace();
+                }
+            }
+        });
 
         //Panel4
         btnHistory = new JButton("History");
@@ -110,61 +270,16 @@ public class Knapsack implements ActionListener, ItemListener {
 		frame.setVisible(true);
         frame.setResizable(false);
     }
-    
-    public static Connection getConnection() throws Exception {
-        
-        try {
-            String driver = "com.sql.jdbc.Driver";
-            String url = "jdbc:mysql://localhost:3306/database";
-            String username = "Albedo";
-            String password = "SolarIsotoma";
-            Class.forName(driver);
-
-            Connection conn = DriverManager.getConnection(url, username, password);
-            System.out.println("Connection Success!");
-
-            return conn;
-        } catch(Exception e) {
-            e.getStackTrace();
-        }
-        
-        return null;
-    }
-
-    public static void createTable() throws Exception {
-        try {
-            Connection con = getConnection();
-            PreparedStatement create = con.prepareStatement("CREATE TABLE IF NOT EXIST ulam(id int NOT NULL AUTO_INCREMENT, name VARCHAR(25), PRIMARY KEY (id))");
-            create.executeUpdate();
-
-            System.out.println("Table Creation Success!");
-        } catch(Exception e){
-            e.getStackTrace();
-        }
-    }
-
-    public static Table getTable() throws Exception {
-        try {
-            Connection con = getConnection();
-            PreparedStatement create = con.prepareStatement("SELECT id FROM database");
-            create.executeQuery();
-
-        } catch(Exception e) {
-            
-        }
-        
-        return null;
-    }
 
 
     public static void main(String[] args) throws Exception {
-        createTable();
 
         new Knapsack();
     }
 
     @Override
     public void itemStateChanged(ItemEvent e) {
+
         
     }
 
