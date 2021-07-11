@@ -29,17 +29,32 @@ public abstract class UlamAbstract {
         return presyo;
     }
 
-    public String getIngredients(int ctr) {
-        return ingredients[ctr];
+    public String getIngredients(int i) {
+        return ingredients[i];
     }
 
-
-    public double getPrices(int ctr) {
-        return prices[ctr];
+    public String[] getAllIngredients() {
+        return ingredients;
     }
 
-    public double getWeight(int ctr) {
-        return weight[ctr];
+    public double getPrices(int i) {
+        return prices[i];
+    }
+    
+    public double[] getAllPrices() {
+        return prices;
+    }
+
+    public double getWeight(int i) {
+        return weight[i];
+    }
+
+    public double[] getAllWeight() {
+        return weight;
+    }
+
+    public String getUnit(int i) {
+        return units[i];
     }
 
     public int getLength() {
