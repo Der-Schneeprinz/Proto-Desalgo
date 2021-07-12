@@ -634,7 +634,24 @@ public class Knapsack implements ActionListener, ItemListener {
 
                 //This pushes the optimized answer to the stack
                 stack.push(KnapsackAlgo(ulams[cmbSelection.getSelectedIndex()], Double.parseDouble(txtBudget.getText())));
-                JOptionPane.showMessageDialog(null, stack.peek(), "Selection", JOptionPane.PLAIN_MESSAGE);
+                UlamArray meal = new UlamArray(stack.peek());
+                String ingr = new String("");
+                String prices = new String("");
+                String weight = new String("");
+                for(int i = 0; i < ulams[cmbSelection.getSelectedIndex()].getLength(); i++) {
+                    ingr.concat(meal.getIngredients(i) + " ");
+                    prices.concat(Double.toString(meal.getPrices(i)) + " ");
+                    weight.concat(Double.toString(meal.getWeight(i)) + meal.getUnit(i) + " ");
+                }
+
+                JOptionPane.showMessageDialog(null,
+                                                "Meal: " + meal.getTitle() +
+                                                "\nPrice: " + meal.getPresyo() +
+                                                "\nIngredients: " + ingr +
+                                                "\nPrices: " + prices +
+                                                "\nWeight: " + weight,
+                                                "Selection", JOptionPane.PLAIN_MESSAGE
+                                            );
 
             }
         });

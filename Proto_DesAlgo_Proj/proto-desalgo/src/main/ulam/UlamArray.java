@@ -10,4 +10,10 @@ public class UlamArray extends UlamAbstract {
         super(title, presyo, ingredients, prices, weight, units);
 
     }
+
+    public UlamArray(UlamArray ulam) {
+
+        super(ulam);
+
+    }
 }

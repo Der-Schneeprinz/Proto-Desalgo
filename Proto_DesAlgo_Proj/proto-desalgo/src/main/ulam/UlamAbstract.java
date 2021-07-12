@@ -8,6 +8,7 @@ public abstract class UlamAbstract {
     protected double[] weight;
     protected double presyo;
     protected String[] units;
+    protected UlamAbstract ulam;
 
 
     public UlamAbstract(String title, double presyo, String[] ingredients, double[] prices, double[] weight, String[] units) {
@@ -18,6 +19,12 @@ public abstract class UlamAbstract {
         this.prices = prices;
         this.weight = weight;
         this.units = units;
+
+    }
+
+    public UlamAbstract(UlamAbstract ulam) {
+
+        this.ulam = ulam;
 
     }
 
