@@ -14,7 +14,10 @@ package main;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Stack;
+import java.util.Arrays;
+import java.util.*;
+import java.io.*;
+import java.sql.Timestamp;
 
 import main.ulam.*;
 
@@ -60,10 +63,15 @@ public class Knapsack implements ActionListener, ItemListener {
     //Font Styles
     Font fBold;
 
-    public Knapsack() {
+    public Knapsack() throws IOException {
         
         //Declaration of Ulam Object Array
         UlamArray[] ulams = new UlamArray[10];
+        File file = new File("C:\\Users\\Mac\\Documents\\VSC_Java\\Proto_DesAlgo_Proj\\proto-desalgo\\src\\main\\History.txt");
+        if(file.createNewFile())
+            System.out.println("File now exists: " + file.getName());
+        else
+            System.out.println("File already exists.");
 
         //Details of each Ulam Object
         ulams[0] = new UlamArray(
@@ -627,32 +635,70 @@ public class Knapsack implements ActionListener, ItemListener {
         btnHistory = new JButton("History");
         panel6.add(btnSelect);
         panel6.add(btnHistory);
-        btnHistory.setEnabled(false);
+        if(!file.exists())
+            btnHistory.setEnabled(false);
+        else
+            btnHistory.setEnabled(true);
         btnSelect.setEnabled(false);
         btnSelect.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
 
                 //This pushes the optimized answer to the stack
                 stack.push(KnapsackAlgo(ulams[cmbSelection.getSelectedIndex()], Double.parseDouble(txtBudget.getText())));
-                UlamArray meal = new UlamArray(stack.peek());
-                String ingr = new String("");
-                String prices = new String("");
-                String weight = new String("");
-                for(int i = 0; i < ulams[cmbSelection.getSelectedIndex()].getLength(); i++) {
-                    ingr.concat(meal.getIngredients(i) + " ");
-                    prices.concat(Double.toString(meal.getPrices(i)) + " ");
-                    weight.concat(Double.toString(meal.getWeight(i)) + meal.getUnit(i) + " ");
+                
+                UlamArray meal = new UlamArray(stack.peek().getTitle(), stack.peek().getPresyo(), stack.peek().getAllIngredients(), stack.peek().getAllPrices(), stack.peek().getAllWeight(), stack.peek().getAllUnit());
+                
+                try {
+                    FileWriter filew = new FileWriter(file, true);
+                    Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+                    String mealStr;
+                    if(file.exists()) {
+                        mealStr = "Meal: " + meal.getTitle() +
+                        "\nPrice: " + meal.getPresyo() +
+                        "\nIngredients: " + Arrays.toString(meal.getAllIngredients()) +
+                        "\nPrices: " + Arrays.toString(meal.getAllPrices()) +
+                        "\nWeight: " + Arrays.toString(meal.getAllWeight()) +
+                        "\nTime: " + timestamp + "\n----------\n";
+                        System.out.println(mealStr);
+                        filew.append(mealStr);
+                        filew.close();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error: File does not exist.", "", JOptionPane.PLAIN_MESSAGE);
+                    }
+                    
+                    JOptionPane.showMessageDialog(null,
+                                                    "Meal: " + meal.getTitle() +
+                                                    "\nPrice: " + meal.getPresyo() +
+                                                    "\nIngredients: " + Arrays.toString(meal.getAllIngredients()) +
+                                                    "\nPrices: " + Arrays.toString(meal.getAllPrices()) +
+                                                    "\nWeight: " + Arrays.toString(meal.getAllWeight()) +
+                                                    "\nTime: " + timestamp,
+                                                    "Selection", JOptionPane.PLAIN_MESSAGE
+                                                );
+                    btnHistory.setEnabled(true);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-
-                JOptionPane.showMessageDialog(null,
-                                                "Meal: " + meal.getTitle() +
-                                                "\nPrice: " + meal.getPresyo() +
-                                                "\nIngredients: " + ingr +
-                                                "\nPrices: " + prices +
-                                                "\nWeight: " + weight,
-                                                "Selection", JOptionPane.PLAIN_MESSAGE
-                                            );
-
+            }
+        });
+        btnHistory.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                try {
+                    FileReader filer = new FileReader(file);
+                    char chr = '\0';
+                    String str = "";
+                    int i;
+                    while((i=filer.read())!=-1) {
+                        chr = (char)i;
+                        str = str.concat(String.valueOf(chr));
+                    }
+                    filer.close();
+                    JOptionPane.showMessageDialog(null, str, "", JOptionPane.PLAIN_MESSAGE);
+                } catch(FileNotFoundException e) {
+                    e.getStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
         
@@ -666,21 +712,21 @@ public class Knapsack implements ActionListener, ItemListener {
     }
 
     public static UlamArray KnapsackAlgo(UlamArray ulam, double budget) {
-        String[] ingredient = new String[10];
-        String[] unit = new String[10];
-        double[] price =  new double[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0,};
-        double[] weight = new double[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0,};
+        String[] ingredient = new String[9];
+        String[] unit = new String[9];
+        double[] price =  new double[] {0, 0, 0, 0, 0, 0, 0, 0, 0,};
+        double[] weight = new double[] {0, 0, 0, 0, 0, 0, 0, 0, 0,};
         double totPrice = 0;
         int i = 0;
-        //Knapsack Solver
         while(budget > ulam.getPrices(i)) {
             ingredient[i] = ulam.getIngredients(i);
             price[i] += ulam.getPrices(i);
             weight[i] += ulam.getWeight(i);
             unit[i] = ulam.getUnit(i);
-            budget = budget - ulam.getPrices(i);
+            budget -= ulam.getPrices(i);
             i++;
             i %= 9;// for relooping
+            System.out.println("i: " + i);
         }
         price[i] += budget;
         weight[i] += (budget / ulam.getPrices(i)) * ulam.getWeight(i);
@@ -688,7 +734,6 @@ public class Knapsack implements ActionListener, ItemListener {
         unit[i] = ulam.getUnit(i);
         for(int j = 0; j < ingredient.length; j++)
             totPrice += price[i];
-
         UlamArray newUlam = new UlamArray(ulam.getTitle(), totPrice, ingredient, price, weight, unit);
         return newUlam;
     }
@@ -696,7 +741,6 @@ public class Knapsack implements ActionListener, ItemListener {
     @Override
     public void itemStateChanged(ItemEvent e) {
 
-        
     }
 
     @Override

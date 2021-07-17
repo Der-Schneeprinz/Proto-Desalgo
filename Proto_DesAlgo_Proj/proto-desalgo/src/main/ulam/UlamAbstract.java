@@ -64,6 +64,10 @@ public abstract class UlamAbstract {
         return units[i];
     }
 
+    public String[] getAllUnit() {
+        return units;
+    }
+
     public int getLength() {
         return ingredients.length;
     }
