@@ -1,0 +1,47 @@
+Meal: Pinakbet
+Price: 18.0
+Ingredients: [String Beans, Okra, Eggplant, Squash, Alamang, Onion, Garlic, Ginger, Green Beans]
+Prices: [10.0, 10.0, 10.0, 20.0, 10.0, 5.0, 3.0, 10.0, 2.0]
+Weight: [200.0, 200.0, 200.0, 250.0, 50.0, 50.0, 10.0, 50.0, 40.0]
+Time: 2021-07-17 04:09:29.665
+----------
+Meal: Pinakbet
+Price: 225.0
+Ingredients: [String Beans, Okra, Eggplant, Squash, Alamang, Onion, Garlic, Ginger, Green Beans]
+Prices: [20.0, 20.0, 20.0, 25.0, 10.0, 5.0, 3.0, 10.0, 10.0]
+Weight: [400.0, 400.0, 400.0, 312.5, 50.0, 50.0, 10.0, 50.0, 200.0]
+Units: [g, g, g, g, g, g, g, g, g]
+Time: 2021-07-19 06:34:43.686
+----------
+Meal: Pinakbet
+Price: 225.0
+Ingredients: [String Beans, Okra, Eggplant, Squash, Alamang, Onion, Garlic, Ginger, Green Beans]
+Prices: [20.0, 20.0, 20.0, 25.0, 10.0, 5.0, 3.0, 10.0, 10.0]
+Weight: [400.0, 400.0, 400.0, 312.5, 50.0, 50.0, 10.0, 50.0, 200.0]
+Units: [g, g, g, g, g, g, g, g, g]
+Time: 2021-07-19 06:37:00.003
+----------
+Meal: Pork Adobo
+Price: 798.0
+Ingredients: [Pork Belly, Vinegar, Soy Sauce, Garlic, Dried Bay Leaves, Peppercorn, Salt]
+Prices: [114.0, 8.0, 8.0, 5.0, 5.0, 5.0, 5.0]
+Weight: [0.32571428571428573, 150.0, 150.0, 45.0, 1.0, 1.0, 50.0]
+Units: [kg, g, g, g, g, g, g]
+Time: 2021-07-19 07:30:26.552
+----------
+Meal: Pinakbet
+Price: 711.0
+Ingredients: [String Beans, Okra, Eggplant, Squash, Alamang, Onion, Garlic, Ginger, Green Beans]
+Prices: [80.0, 80.0, 80.0, 160.0, 79.0, 35.0, 21.0, 70.0, 70.0]
+Weight: [1600.0, 1600.0, 1600.0, 2000.0, 395.0, 350.0, 70.0, 350.0, 1400.0]
+Units: [g, g, g, g, g, g, g, g, g]
+Time: 2021-07-19 07:43:14.0
+----------
+Meal: Ginataang Papaya
+Price: 135.0
+Ingredients: [Papaya, Gata, Ginger, Chicken, Long Chili, Onion, Garlic, Black Pepper, Malunggay Leaves]
+Prices: [25.0, 30.0, 5.0, 35.0, 2.0, 5.5, 3.5, 2.0, 15.0]
+Weight: [1000.0, 500.0, 200.0, 250.0, 20.0, 50.0, 10.0, 5.0, 37.5]
+Units: [g, mL, g, g, g, g, g, g, g]
+Time: 2021-07-19 07:43:29.27
+----------

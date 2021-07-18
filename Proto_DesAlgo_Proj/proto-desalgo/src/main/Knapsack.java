@@ -60,9 +60,6 @@ public class Knapsack implements ActionListener, ItemListener {
     //Combobox
     JComboBox<String> cmbSelection;
 
-    //Font Styles
-    Font fBold;
-
     public Knapsack() throws IOException {
         
         //Declaration of Ulam Object Array
@@ -644,7 +641,7 @@ public class Knapsack implements ActionListener, ItemListener {
             public void actionPerformed(ActionEvent ae) {
 
                 //This pushes the optimized answer to the stack
-                stack.push(KnapsackAlgo(ulams[cmbSelection.getSelectedIndex()], Double.parseDouble(txtBudget.getText())));
+                stack.push(KnapsackCalc.KnapsackAlgo(ulams[cmbSelection.getSelectedIndex()], Double.parseDouble(txtBudget.getText())));
                 
                 UlamArray meal = new UlamArray(stack.peek().getTitle(), stack.peek().getPresyo(), stack.peek().getAllIngredients(), stack.peek().getAllPrices(), stack.peek().getAllWeight(), stack.peek().getAllUnit());
                 
@@ -658,8 +655,8 @@ public class Knapsack implements ActionListener, ItemListener {
                         "\nIngredients: " + Arrays.toString(meal.getAllIngredients()) +
                         "\nPrices: " + Arrays.toString(meal.getAllPrices()) +
                         "\nWeight: " + Arrays.toString(meal.getAllWeight()) +
+                        "\nUnits: " + Arrays.toString(meal.getAllUnit()) +
                         "\nTime: " + timestamp + "\n----------\n";
-                        System.out.println(mealStr);
                         filew.append(mealStr);
                         filew.close();
                     } else {
@@ -672,6 +669,7 @@ public class Knapsack implements ActionListener, ItemListener {
                                                     "\nIngredients: " + Arrays.toString(meal.getAllIngredients()) +
                                                     "\nPrices: " + Arrays.toString(meal.getAllPrices()) +
                                                     "\nWeight: " + Arrays.toString(meal.getAllWeight()) +
+                                                    "\nUnits: " + Arrays.toString(meal.getAllUnit()) +
                                                     "\nTime: " + timestamp,
                                                     "Selection", JOptionPane.PLAIN_MESSAGE
                                                 );
@@ -693,7 +691,7 @@ public class Knapsack implements ActionListener, ItemListener {
                         str = str.concat(String.valueOf(chr));
                     }
                     filer.close();
-                    JOptionPane.showMessageDialog(null, str, "", JOptionPane.PLAIN_MESSAGE);
+                    JOptionPane.showMessageDialog(null, str, "History", JOptionPane.PLAIN_MESSAGE);
                 } catch(FileNotFoundException e) {
                     e.getStackTrace();
                 } catch (IOException e) {
@@ -709,33 +707,6 @@ public class Knapsack implements ActionListener, ItemListener {
 
     public static void main(String[] args) throws Exception {
         new Knapsack();
-    }
-
-    public static UlamArray KnapsackAlgo(UlamArray ulam, double budget) {
-        String[] ingredient = new String[9];
-        String[] unit = new String[9];
-        double[] price =  new double[] {0, 0, 0, 0, 0, 0, 0, 0, 0,};
-        double[] weight = new double[] {0, 0, 0, 0, 0, 0, 0, 0, 0,};
-        double totPrice = 0;
-        int i = 0;
-        while(budget > ulam.getPrices(i)) {
-            ingredient[i] = ulam.getIngredients(i);
-            price[i] += ulam.getPrices(i);
-            weight[i] += ulam.getWeight(i);
-            unit[i] = ulam.getUnit(i);
-            budget -= ulam.getPrices(i);
-            i++;
-            i %= 9;// for relooping
-            System.out.println("i: " + i);
-        }
-        price[i] += budget;
-        weight[i] += (budget / ulam.getPrices(i)) * ulam.getWeight(i);
-        ingredient[i]= ulam.getIngredients(i);
-        unit[i] = ulam.getUnit(i);
-        for(int j = 0; j < ingredient.length; j++)
-            totPrice += price[i];
-        UlamArray newUlam = new UlamArray(ulam.getTitle(), totPrice, ingredient, price, weight, unit);
-        return newUlam;
     }
 
     @Override
